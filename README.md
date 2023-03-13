@@ -1,1 +1,1 @@
-# microservice-authentication-oauth2-aks
+# Microservice User Authentication using Azure AD and Oauth 2 Proxy
