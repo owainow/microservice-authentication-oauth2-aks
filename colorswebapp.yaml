@@ -1,0 +1,50 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  labels:
+    app.kubernetes.io/name: colors
+  name: colors-web
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: colors-web-depl
+  namespace: colors-web
+
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: colors-web-service
+  template:
+    metadata:
+      labels:
+        app: colors-web-service
+    spec:
+      containers:
+       - name: colors-web-image
+         image: ghcr.io/markharrison/colorsweb:latest
+         imagePullPolicy: Always
+         resources:
+          requests:
+            memory: "128Mi"
+            cpu: "500m"
+          limits:
+            memory: "256Mi"
+            cpu: "1000m"
+---
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: colors-web-clusterip-srv
+  namespace: colors-web
+spec:
+  type: ClusterIP
+  selector:
+    app: colors-web-service
+  ports:
+  - name: colors-web-service-http
+    protocol: TCP
+    port: 80
+    targetPort: 80
